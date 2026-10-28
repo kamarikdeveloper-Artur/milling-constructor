@@ -1,3 +1,4 @@
+import {sideNames,sideDirections} from '../templates/orientation.js';
 import {getState,subscribe} from '../core/state.js';
 import {buildPass} from '../core/passCoordinates.js';
 import {formatMm} from '../core/geometry.js';
@@ -5,7 +6,7 @@ export function bindPassDialog(){
   const dialog=document.querySelector('#pass-dialog'),body=document.querySelector('#pass-rows');
   function refresh(){
     const {part,template}=getState(),pass=buildPass(part,template);
-    document.querySelector('#pass-size').textContent=`Деталь ${formatMm(part.width)} × ${formatMm(part.height)} мм`;
+    document.querySelector('#pass-size').textContent=`Деталь ${formatMm(part.width)} × ${formatMm(part.height)} мм · ${template.type==='chair'?'Стілець · від низу до верху':sideNames[template.side||'top']+' · '+sideDirections[template.side||'top']}`;
     document.querySelector('#pass-error').textContent=pass.error;
     document.querySelector('#pass-table').hidden=!!pass.error;
     body.replaceChildren();

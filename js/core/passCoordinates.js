@@ -1,5 +1,7 @@
+import {chairPass} from '../templates/chair.js';
+import {localPart,orientPoint} from '../templates/orientation.js';
 import {validateSmile,smileGeometry} from '../templates/smile.js';
-export function buildPass(part,template) {
+function buildLocalPass(part,template) {
   if(template.type!=='smile')return {error:'Спочатку виберіть шаблон «Ручка посмішка».',points:[]};
   const result=validateSmile(template,part);
   if(!result.value)return {error:'Виправте параметри ручки, щоб отримати координати.',points:[]};
@@ -20,4 +22,14 @@ export function buildPass(part,template) {
   if(geometry.radiusTop)append(p[7],'MAC','Вихід ручки на верхній край',geometry.radiusTop,{x:p[7].x,y:part.height-geometry.radiusTop},'CW');
   append({x:part.width,y:part.height},'ML','Верхній правий кут деталі');
   return {error:'',points};
+}
+
+export function buildPass(part,template){
+ if(template.type==='chair')return chairPass(part,template);
+ const side=template.side||'top';
+ const result=buildLocalPass(localPart(part,side),{...template,side:'top'});
+ result.points=result.points.map((point,index)=>({...point,...orientPoint(point,part,side),
+  center:point.center?orientPoint(point.center,part,side):point.center,
+  label:side==='top'?point.label:index===0?'Початковий кут обраної сторони':index===result.points.length-1?'Кінцевий кут обраної сторони':point.label.replace('Верхнє ліве','Вхідне перше').replace('Нижнє праве','Внутрішнє друге').replace('Лівий початок','Початок').replace('Правий кінець','Кінець').replace('нижнього лівого','першого внутрішнього').replace('верхнього правого','другого вхідного').replace('верхній край','обраний край')}));
+ return result;
 }

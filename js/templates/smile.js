@@ -1,5 +1,6 @@
+import {localPart,orientPoint} from './orientation.js';
 // Dimensions are actual tangent-to-tangent opening and bottom widths.
-export function validateSmile(raw, part) {
+function validateLocalSmile(raw, part) {
   const v = {},
     errors = {};
   for (const key of ["length", "depth", "bottom", "radiusTop", "radiusBottom", "center"]) {
@@ -25,7 +26,7 @@ export function validateSmile(raw, part) {
   }
   return { errors, value: Object.keys(errors).length ? null : v };
 }
-export function smileGeometry(v, part) {
+function localSmileGeometry(v, part) {
   const h = (v.length - v.bottom) / 2,
     d = v.depth,
     rt = v.radiusTop,
@@ -71,8 +72,19 @@ export function smilePath(geometry, view, toSvg) {
   const arc = (r, sweep, i) => (r ? `A ${r} ${r} 0 0 ${sweep} ${xy(i)}` : `L ${xy(i)}`);
   return `M ${xy(0)} ${arc(top, 1, 1)} L ${xy(2)} ${arc(bottom, 0, 3)} L ${xy(4)} ${arc(bottom, 0, 5)} L ${xy(6)} ${arc(top, 1, 7)}`;
 }
-export function smileDefaults(part) {
+export function smileDefaults(part, side="top") {
+  part=localPart(part,side);
   const length = Math.min(200, part.width * 0.6),
     depth = Math.min(30, part.height * 0.2, length * 0.15);
-  return { length, depth, bottom: length * 0.5, radiusTop: 20, radiusBottom: 20, center: part.width / 2 };
+  return { side, length, depth, bottom: length * 0.5, radiusTop: Math.min(20,((length*.25)**2+depth**2)/(4*depth)), radiusBottom: Math.min(20,((length*.25)**2+depth**2)/(4*depth)), center: part.width / 2 };
+}
+
+export function validateSmile(raw,part){
+ const side=raw.side||'top',result=validateLocalSmile(raw,localPart(part,side));
+ if(result.value)result.value.side=side;
+ return result;
+}
+export function smileGeometry(v,part){
+ const side=v.side||'top',geometry=localSmileGeometry(v,localPart(part,side));
+ return {...geometry,points:geometry.points.map(point=>orientPoint(point,part,side))};
 }

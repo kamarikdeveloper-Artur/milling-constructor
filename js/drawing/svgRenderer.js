@@ -1,3 +1,5 @@
+import {validateChair,chairPoints} from '../templates/chair.js';
+import {localPart,orientPoint} from '../templates/orientation.js';
 import { cutoutFits, cutoutOffsets } from "../core/cutout.js";
 import { validateSmile, smileGeometry, smilePath } from "../templates/smile.js";
 import { validateLine } from "../core/validation.js";
@@ -26,8 +28,10 @@ export function render(svg, state, view) {
     const geometry = smileGeometry(smile.value, state.part),
       cut = smilePath(geometry, view, modelToSvg);
     const start = modelToSvg(geometry.points[0], view);
+    const side=smile.value.side,local=localPart(state.part,side);
+    const [a,b,c,d]=[{x:0,y:0},{x:0,y:local.height},{x:local.width,y:local.height},{x:local.width,y:0}].map(point=>modelToSvg(orientPoint(point,state.part,side),view));
     add(scene, "path", {
-      d: `M ${o.x} ${o.y} L ${tl.x} ${tl.y} L ${start.x} ${start.y} ${cut.replace(/^M \S+ \S+ /, "")} L ${tr.x} ${tr.y} L ${br.x} ${br.y} Z`,
+      d: `M ${a.x} ${a.y} L ${b.x} ${b.y} L ${start.x} ${start.y} ${cut.replace(/^M \S+ \S+ /, "")} L ${c.x} ${c.y} L ${d.x} ${d.y} Z`,
       class: "part",
     });
     add(scene, "path", { d: cut, class: "milling-line template-cut" });
@@ -37,7 +41,7 @@ export function render(svg, state, view) {
     add(scene, "polygon", { points: points.map((p) => `${p.x},${p.y}`).join(" "), class: "part" });
   }
   if (br.x - o.x > 180 && o.y - tl.y > 65)
-    add(scene, "text", { x: (o.x + br.x) / 2, y: (o.y + tl.y) / 2, "text-anchor": "middle", class: "svg-label part-label" }, "ЗАГОТОВКА");
+    add(scene, "text", { x: (o.x + br.x) / 2, y: (o.y + tl.y) / 2, "text-anchor": "middle", class: "svg-label part-label" }, "ДЕТАЛЬ");
   if (state.display.axes) {
     add(scene, "path", { d: `M ${o.x - 20} ${o.y} H ${br.x + 28} l -7 -4 m 7 4 l -7 4`, class: "axis-x" });
     add(scene, "path", { d: `M ${o.x} ${o.y + 20} V ${tl.y - 28} l -4 7 m 4 -7 l 4 7`, class: "axis-y" });
@@ -112,6 +116,19 @@ export function render(svg, state, view) {
     }
     svg.querySelector("desc").textContent +=
       ` Прямокутний виріз ${formatMm(c.width)} на ${formatMm(c.height)} мм; зліва ${formatMm(offsets.left)}, справа ${formatMm(offsets.right)}, зверху ${formatMm(offsets.top)}, знизу ${formatMm(offsets.bottom)} мм.`;
+  }
+  if(state.workspace.mode==='milling'&&state.template.type==='chair'){
+    const result=validateChair(state.template,state.part);
+    if(result.value){
+      const points=chairPoints(result.value,state.part).map(point=>modelToSvg(point,view));
+      const group=add(scene,'g',{class:'chair-template'});
+      add(group,'polyline',{points:points.map(point=>`${point.x},${point.y}`).join(' '),class:'milling-line chair-line'});
+      points.forEach((point,index)=>{
+        add(group,'circle',{cx:point.x,cy:point.y,r:4,class:'milling-point'});
+        add(group,'text',{x:point.x+9,y:point.y+(index===3?18:-10),class:'svg-label milling-label'},String(index+1));
+      });
+      svg.querySelector('desc').textContent+=' Шаблон «Стілець»: відкрита ламана з чотирьох точок.';
+    }
   }
   return step;
 }

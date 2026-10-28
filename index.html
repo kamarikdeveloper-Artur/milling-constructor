@@ -26,7 +26,7 @@
         </fieldset>
         <form id="parameters" novalidate>
           <fieldset>
-            <legend>Габарити · мм</legend>
+            <legend>Габарити деталі в ммю</legend>
             <label for="width">Ширина <span>X</span></label
             ><input id="width" name="width" type="number" min="1" max="10000" step="1" value="600" required aria-describedby="width-error" />
             <p class="error" id="width-error"></p>
@@ -80,29 +80,29 @@
             <div id="template-type" role="group" aria-label="Шаблон обробки">
               <label class="template-choice"
                 ><input type="radio" name="template-choice" value="none" checked /><span
-                  ><strong>Без шаблону</strong><small>Відрізок за координатами</small></span
+                  ><strong>Вільне фрезерування</strong><small>Відрізок за координатами</small></span
                 ></label
               ><label class="template-choice"
                 ><input type="radio" name="template-choice" value="smile" /><span
                   ><strong>Ручка посмішка</strong><small>Виріз від верхнього краю · налаштувати</small></span
                 ></label
               >
-            </div>
-            <div id="template-fields" hidden>
-              <p class="muted">Виріз від верхнього краю. Усі розміри — мм у площині XY.</p>
+            <label class="template-choice"><input type="radio" name="template-choice" value="chair"><span><strong>Стілець</strong><small>Відкрита ламана · 4 точки</small></span></label></div>
+            <div id="chair-fields" hidden><p class="muted">Відкрита ламана: вгору → вправо → похило до верхнього краю. Межі заготовки не фрезеруються.</p><button type="button" id="chair-sketch">Застосувати ескіз 700 × 1000 мм</button><label for="chair-seatHeight">Висота сидіння від низу, мм</label><input id="chair-seatHeight" name="seatHeight" type="number" min="0" step="1" aria-describedby="chair-seatHeight-error"><p class="error" id="chair-seatHeight-error"></p><label for="chair-seatLength">Довжина горизонтальної ділянки, мм</label><input id="chair-seatLength" name="seatLength" type="number" min="0" step="1" aria-describedby="chair-seatLength-error"><p class="error" id="chair-seatLength-error"></p><label for="chair-jointRight">Відступ справа біля сидіння, мм</label><input id="chair-jointRight" name="jointRight" type="number" min="0" step="1" aria-describedby="chair-jointRight-error"><p class="error" id="chair-jointRight-error"></p><label for="chair-topRight">Відступ справа зверху, мм</label><input id="chair-topRight" name="topRight" type="number" min="0" step="1" aria-describedby="chair-topRight-error"><p class="error" id="chair-topRight-error"></p><p id="chair-message" role="status" aria-live="polite"></p></div><div id="template-fields" hidden><label for="smile-side">Сторона встановлення ручки</label><select id="smile-side"><option value="top">Зверху</option><option value="left">Зліва</option><option value="right">Справа</option><option value="bottom">Знизу</option></select><p id="smile-position-note" class="muted"></p>
+              <p class="muted">Виріз від обраного краю. Усі розміри — мм у площині XY.</p>
               <label for="smile-length">Довжина ручки</label
               ><input id="smile-length" name="length" type="number" min="0" step="1" value="200" aria-describedby="smile-length-error" />
               <p class="error" id="smile-length-error"></p>
-              <label for="smile-depth">Глибина вирізу ↓</label
+              <label for="smile-depth">Глибина вирізу всередину деталі</label
               ><input id="smile-depth" name="depth" type="number" min="0" step="1" value="30" aria-describedby="smile-depth-error" />
               <p class="error" id="smile-depth-error"></p>
               <label for="smile-bottom">Ширина плоского дна</label
               ><input id="smile-bottom" name="bottom" type="number" min="0" step="1" value="100" aria-describedby="smile-bottom-error" />
               <p class="error" id="smile-bottom-error"></p>
-              <label for="smile-radiusTop">Верхній радіус · зліва та справа</label
+              <label for="smile-radiusTop">Радіуси біля входу · обидва</label
               ><input id="smile-radiusTop" name="radiusTop" type="number" min="0" step="1" value="0" aria-describedby="smile-radiusTop-error" />
               <p class="error" id="smile-radiusTop-error"></p>
-              <label for="smile-radiusBottom">Нижній радіус · зліва та справа</label
+              <label for="smile-radiusBottom">Внутрішні радіуси · обидва</label
               ><input
                 id="smile-radiusBottom"
                 name="radiusBottom"
@@ -113,7 +113,7 @@
                 aria-describedby="smile-radiusBottom-error"
               />
               <p class="error" id="smile-radiusBottom-error"></p>
-              <label for="smile-center">Центр від лівого краю</label
+              <label for="smile-center">Положення центра вздовж сторони</label
               ><input id="smile-center" name="center" type="number" min="0" step="1" value="300" aria-describedby="smile-center-error" />
               <p class="error" id="smile-center-error"></p>
               <button id="template-center" type="button">Центрувати по ширині</button>
@@ -184,7 +184,7 @@
     <dialog id="pass-dialog" aria-labelledby="pass-title">
       <div class="pass-heading">
         <div>
-          <p class="eyebrow">РУЧКА ПОСМІШКА · ПРОХІД ЗЛІВА НАПРАВО</p>
+          <p class="eyebrow">КООРДИНАТИ ОБРАНОГО ШАБЛОНУ</p>
           <h2 id="pass-title">Координати проходу</h2>
           <p id="pass-size"></p>
         </div>
@@ -215,6 +215,6 @@
         верстата. Значення округлено до 0,01 мм.
       </p>
     </dialog>
-    <script type="module" src="js/main.js?v=aside-order-12"></script>
+    <script type="module" src="js/main.js?v=chair-14"></script>
   </body>
 </html>
