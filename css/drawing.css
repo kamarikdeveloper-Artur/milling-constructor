@@ -1,0 +1,95 @@
+#drawing {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.part {
+  fill: #ffd445;
+  fill-opacity: 0.75;
+  stroke: #26876a;
+  stroke-width: 2;
+}
+.grid-line {
+  stroke: #e1eae4;
+  stroke-width: 1;
+}
+.axis-x {
+  stroke: #c37b66;
+}
+.axis-y {
+  stroke: #568ebc;
+}
+.axis-x,
+.axis-y {
+  stroke-width: 1.5;
+  fill: none;
+}
+.dimension {
+  stroke: #8ca494;
+  stroke-width: 1;
+  fill: none;
+}
+.svg-label {
+  font:
+    12px Segoe UI,
+    Arial,
+    sans-serif;
+  fill: #64806e;
+}
+.dimension-label {
+  fill: #385f49;
+  font-size: 13px;
+}
+.origin {
+  fill: #238365;
+  stroke: white;
+  stroke-width: 2;
+}
+.part-label {
+  fill: #7b9b89;
+  letter-spacing: 2px;
+}
+.milling-line {
+  stroke: #cc7525;
+  stroke-width: 2;
+  stroke-dasharray: 8 6;
+  fill: none;
+}
+.milling-point {
+  fill: #cc7525;
+  stroke: white;
+  stroke-width: 1.5;
+}
+.milling-label {
+  fill: #a65d1b;
+  font-weight: 700;
+  paint-order: stroke;
+  stroke: #fbfcfb;
+  stroke-width: 3px;
+}
+
+.position-cutout {
+  fill: #f4ceb0;
+  fill-opacity: 0.85;
+  stroke: #c87734;
+  stroke-width: 2;
+  cursor: grab;
+  touch-action: none;
+}
+.position-cutout:active {
+  cursor: grabbing;
+}
+.offset-guide {
+  stroke: #9fae9d;
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+  pointer-events: none;
+}
+.offset-label {
+  font-size: 1.3rem;
+  fill: #795936;
+  paint-order: stroke;
+  stroke: #fbfcfb;
+  stroke-width: 3px;
+  pointer-events: none;
+}

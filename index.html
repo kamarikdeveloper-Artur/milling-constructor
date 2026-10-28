@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Milling Constructor</title>
+    <link rel="stylesheet" href="css/main.css" />
+  </head>
+  <body>
+    <header>
+      <div class="brand">
+        <b>M</b>
+        <div>Milling Constructor<small>Універсальний конструктор</small></div>
+      </div>
+      <span class="badge">ШАБЛОНИ · РУЧКА</span>
+    </header>
+    <main>
+      <aside>
+        <p class="eyebrow">01 / ПАРАМЕТРИ</p>
+        <h1>Прямокутна деталь</h1>
+        <p class="muted">Задайте габарити заготовки. Креслення оновлюється під час введення.</p>
+        <fieldset class="workspace-modes">
+          <legend>Режим роботи</legend>
+          <label><input type="radio" name="workspace-mode" value="milling" checked /> Фрезерування</label
+          ><label><input type="radio" name="workspace-mode" value="cutout" /> Позиціонування вирізу</label>
+        </fieldset>
+        <form id="parameters" novalidate>
+          <fieldset>
+            <legend>Габарити · мм</legend>
+            <label for="width">Ширина <span>X</span></label
+            ><input id="width" name="width" type="number" min="1" max="10000" step="1" value="600" required aria-describedby="width-error" />
+            <p class="error" id="width-error"></p>
+            <label for="height">Висота <span>Y</span></label
+            ><input id="height" name="height" type="number" min="1" max="10000" step="1" value="400" required aria-describedby="height-error" />
+            <p class="error" id="height-error"></p>
+            <label for="thickness">Товщина <span>Z</span></label
+            ><input
+              id="thickness"
+              name="thickness"
+              type="number"
+              min="0.1"
+              max="1000"
+              step="1"
+              value="18"
+              required
+              aria-describedby="thickness-error"
+            />
+            <p class="error" id="thickness-error"></p>
+          </fieldset>
+        </form>
+
+        <form id="cutout-parameters" hidden novalidate>
+          <fieldset>
+            <legend>Виріз · прямокутник</legend>
+            <p class="muted">Перетягніть виріз або задайте відступи від країв. Усі значення в мм.</p>
+            <label for="cutout-width">Ширина вирізу</label
+            ><input id="cutout-width" name="width" type="number" min="0" step="1" aria-describedby="cutout-message" /><label for="cutout-height"
+              >Висота вирізу</label
+            ><input id="cutout-height" name="height" type="number" min="0" step="1" aria-describedby="cutout-message" /><label for="cutout-left"
+              >Відступ зліва</label
+            ><input id="cutout-left" name="left" type="number" min="0" step="1" aria-describedby="cutout-message" /><label for="cutout-right"
+              >Відступ справа</label
+            ><input id="cutout-right" name="right" type="number" min="0" step="1" aria-describedby="cutout-message" /><label for="cutout-top"
+              >Відступ зверху</label
+            ><input id="cutout-top" name="top" type="number" min="0" step="1" aria-describedby="cutout-message" /><label for="cutout-bottom"
+              >Відступ знизу</label
+            ><input id="cutout-bottom" name="bottom" type="number" min="0" step="1" aria-describedby="cutout-message" /><button
+              id="cutout-center"
+              type="button"
+            >
+              Розташувати по центру
+            </button>
+            <p id="cutout-message" role="status" aria-live="polite"></p>
+          </fieldset>
+        </form>
+
+        <form id="template-parameters" novalidate>
+          <fieldset>
+            <legend>Шаблони</legend>
+            <div id="template-type" role="group" aria-label="Шаблон обробки">
+              <label class="template-choice"
+                ><input type="radio" name="template-choice" value="none" checked /><span
+                  ><strong>Без шаблону</strong><small>Відрізок за координатами</small></span
+                ></label
+              ><label class="template-choice"
+                ><input type="radio" name="template-choice" value="smile" /><span
+                  ><strong>Ручка посмішка</strong><small>Виріз від верхнього краю · налаштувати</small></span
+                ></label
+              >
+            </div>
+            <div id="template-fields" hidden>
+              <p class="muted">Виріз від верхнього краю. Усі розміри — мм у площині XY.</p>
+              <label for="smile-length">Довжина ручки</label
+              ><input id="smile-length" name="length" type="number" min="0" step="1" value="200" aria-describedby="smile-length-error" />
+              <p class="error" id="smile-length-error"></p>
+              <label for="smile-depth">Глибина вирізу ↓</label
+              ><input id="smile-depth" name="depth" type="number" min="0" step="1" value="30" aria-describedby="smile-depth-error" />
+              <p class="error" id="smile-depth-error"></p>
+              <label for="smile-bottom">Ширина плоского дна</label
+              ><input id="smile-bottom" name="bottom" type="number" min="0" step="1" value="100" aria-describedby="smile-bottom-error" />
+              <p class="error" id="smile-bottom-error"></p>
+              <label for="smile-radiusTop">Верхній радіус · зліва та справа</label
+              ><input id="smile-radiusTop" name="radiusTop" type="number" min="0" step="1" value="0" aria-describedby="smile-radiusTop-error" />
+              <p class="error" id="smile-radiusTop-error"></p>
+              <label for="smile-radiusBottom">Нижній радіус · зліва та справа</label
+              ><input
+                id="smile-radiusBottom"
+                name="radiusBottom"
+                type="number"
+                min="0"
+                step="1"
+                value="0"
+                aria-describedby="smile-radiusBottom-error"
+              />
+              <p class="error" id="smile-radiusBottom-error"></p>
+              <label for="smile-center">Центр від лівого краю</label
+              ><input id="smile-center" name="center" type="number" min="0" step="1" value="300" aria-describedby="smile-center-error" />
+              <p class="error" id="smile-center-error"></p>
+              <button id="template-center" type="button">Центрувати по ширині</button>
+              <p id="template-message" role="status" aria-live="polite"></p>
+            </div>
+          </fieldset>
+        </form>
+
+        <form id="milling-parameters" novalidate>
+          <fieldset>
+            <legend>02 / Відрізок фрезерування</legend>
+            <label class="milling-toggle"><input type="checkbox" id="milling-enabled" checked /> Показати відрізок</label>
+            <p class="muted">Координати від нижнього лівого кута, мм.</p>
+            <div class="point-fields">
+              <div>
+                <label for="x1">X₁ · Початок</label
+                ><input id="x1" name="x1" type="number" min="0" step="1" value="50" required aria-describedby="x1-error" />
+                <p class="error" id="x1-error"></p>
+              </div>
+              <div>
+                <label for="y1">Y₁ · Початок</label
+                ><input id="y1" name="y1" type="number" min="0" step="1" value="50" required aria-describedby="y1-error" />
+                <p class="error" id="y1-error"></p>
+              </div>
+              <div>
+                <label for="x2">X₂ · Кінець</label
+                ><input id="x2" name="x2" type="number" min="0" step="1" value="550" required aria-describedby="x2-error" />
+                <p class="error" id="x2-error"></p>
+              </div>
+              <div>
+                <label for="y2">Y₂ · Кінець</label
+                ><input id="y2" name="y2" type="number" min="0" step="1" value="350" required aria-describedby="y2-error" />
+                <p class="error" id="y2-error"></p>
+              </div>
+            </div>
+            <p id="milling-message" role="status" aria-live="polite"></p>
+          </fieldset>
+        </form>
+
+        <fieldset class="options">
+          <legend>Відображення</legend>
+          <label><input name="grid" type="checkbox" checked /> Сітка</label><label><input name="axes" type="checkbox" checked /> Осі координат</label
+          ><label><input name="dimensions" type="checkbox" checked /> Розміри</label>
+        </fieldset>
+
+        <div class="note">
+          <strong>Початок у точці (0; 0)</strong>
+          <p>Нижній лівий кут деталі.<br />X → вправо · Y ↑ вгору</p>
+        </div>
+      </aside>
+      <section class="drawing-panel" aria-label="Креслення деталі">
+        <div class="toolbar">
+          <div><strong>Креслення деталі</strong><small>Вигляд зверху · XY</small></div>
+          <div class="drawing-actions">
+            <button id="show-pass" type="button">Координати проходу</button><button id="fit" type="button">⤢ Вписати у вікно</button>
+          </div>
+        </div>
+        <div id="viewport">
+          <svg id="drawing" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="drawing-title drawing-description">
+            <title id="drawing-title">Прямокутна деталь</title>
+            <desc id="drawing-description">Координати в мм від нижнього лівого кута.</desc>
+          </svg>
+        </div>
+        <footer><span id="cursor">X: — · Y: — мм</span><span id="grid-info"></span></footer>
+        <div id="status" role="status" aria-live="polite"></div>
+      </section>
+    </main>
+    <dialog id="pass-dialog" aria-labelledby="pass-title">
+      <div class="pass-heading">
+        <div>
+          <p class="eyebrow">РУЧКА ПОСМІШКА · ПРОХІД ЗЛІВА НАПРАВО</p>
+          <h2 id="pass-title">Координати проходу</h2>
+          <p id="pass-size"></p>
+        </div>
+        <button id="close-pass" type="button" aria-label="Закрити вікно" autofocus>✕</button>
+      </div>
+      <p class="pass-note">Початок системи координат — нижній лівий кут. X → вправо, Y ↑ вгору. Усі значення в мм.</p>
+      <p id="pass-error" role="status"></p>
+      <div class="pass-table-wrap">
+        <table id="pass-table">
+          <thead>
+            <tr>
+              <th scope="col">Точка</th>
+              <th scope="col">X1, мм</th>
+              <th scope="col">Y1, мм</th>
+              <th scope="col">Рух до точки</th>
+              <th scope="col">CX1, мм</th>
+              <th scope="col">CY1, мм</th>
+              <th scope="col">R1, мм</th>
+              <th scope="col">DIR</th>
+              <th scope="col">Пояснення</th>
+            </tr>
+          </thead>
+          <tbody id="pass-rows"></tbody>
+        </table>
+      </div>
+      <p class="pass-note">
+        Координати контуру без компенсації радіуса фрези, заходу/виходу та Z. Для дуг показані кінцеві точки й радіуси; це ще не готова програма
+        верстата. Значення округлено до 0,01 мм.
+      </p>
+    </dialog>
+    <script type="module" src="js/main.js?v=input-step-11"></script>
+  </body>
+</html>

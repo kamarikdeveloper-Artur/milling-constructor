@@ -1,0 +1,32 @@
+import {bindCutout,refreshCutout} from './ui/cutout.js';
+import {bindPassDialog} from './ui/passDialog.js';
+import {bindTemplates,refreshTemplates} from './ui/templates.js';
+import {bindMilling,refreshMilling} from './ui/milling.js';
+import {getState,subscribe} from './core/state.js';
+import {formatMm} from './core/geometry.js';
+import {fitViewport} from './drawing/viewport.js';
+import {render} from './drawing/svgRenderer.js';
+import {bindParameters,showStatus} from './ui/parameters.js';
+import {bindEvents} from './ui/events.js';
+const svg=document.querySelector('#drawing');
+let view;
+function redraw() {
+  const bounds=svg.parentElement.getBoundingClientRect();
+  if(bounds.width<=0||bounds.height<=0) return;
+  const state=getState();
+  view=fitViewport(bounds.width,bounds.height,state.part);
+  const step=render(svg,state,view);
+  document.querySelector('#grid-info').textContent=state.display.grid?`Сітка: ${formatMm(step)} мм`:'Сітку вимкнено';
+  refreshMilling();
+  refreshTemplates();
+  refreshCutout();
+  showStatus();
+}
+bindParameters(document.querySelector('#parameters'));
+bindMilling();
+bindTemplates();
+bindPassDialog();
+bindCutout(svg,()=>view);
+subscribe(redraw);
+bindEvents(svg,()=>view,redraw);
+redraw();
