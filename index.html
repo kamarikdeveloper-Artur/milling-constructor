@@ -26,7 +26,7 @@
         </fieldset>
         <form id="parameters" novalidate>
           <fieldset>
-            <legend>Габарити деталі в ммю</legend>
+            <legend>Габарити деталі в мм.</legend>
             <label for="width">Ширина <span>X</span></label
             ><input id="width" name="width" type="number" min="1" max="10000" step="1" value="600" required aria-describedby="width-error" />
             <p class="error" id="width-error"></p>
@@ -87,8 +87,38 @@
                   ><strong>Ручка посмішка</strong><small>Виріз від верхнього краю · налаштувати</small></span
                 ></label
               >
-            <label class="template-choice"><input type="radio" name="template-choice" value="chair"><span><strong>Стілець</strong><small>Відкрита ламана · 4 точки</small></span></label></div>
-            <div id="chair-fields" hidden><p class="muted">Відкрита ламана: вгору → вправо → похило до верхнього краю. Межі заготовки не фрезеруються.</p><button type="button" id="chair-sketch">Застосувати ескіз 700 × 1000 мм</button><label for="chair-seatHeight">Висота сидіння від низу, мм</label><input id="chair-seatHeight" name="seatHeight" type="number" min="0" step="1" aria-describedby="chair-seatHeight-error"><p class="error" id="chair-seatHeight-error"></p><label for="chair-seatLength">Довжина горизонтальної ділянки, мм</label><input id="chair-seatLength" name="seatLength" type="number" min="0" step="1" aria-describedby="chair-seatLength-error"><p class="error" id="chair-seatLength-error"></p><label for="chair-jointRight">Відступ справа біля сидіння, мм</label><input id="chair-jointRight" name="jointRight" type="number" min="0" step="1" aria-describedby="chair-jointRight-error"><p class="error" id="chair-jointRight-error"></p><label for="chair-topRight">Відступ справа зверху, мм</label><input id="chair-topRight" name="topRight" type="number" min="0" step="1" aria-describedby="chair-topRight-error"><p class="error" id="chair-topRight-error"></p><p id="chair-message" role="status" aria-live="polite"></p></div><div id="template-fields" hidden><label for="smile-side">Сторона встановлення ручки</label><select id="smile-side"><option value="top">Зверху</option><option value="left">Зліва</option><option value="right">Справа</option><option value="bottom">Знизу</option></select><p id="smile-position-note" class="muted"></p>
+              <label class="template-choice"
+                ><input type="radio" name="template-choice" value="chair" /><span
+                  ><strong>Стілець</strong><small>Відкрита ламана · 4 точки</small></span
+                ></label
+              >
+            </div>
+            <div id="chair-fields" hidden>
+              <p class="muted">Відкрита ламана: вгору → вправо → похило до верхнього краю. Межі заготовки не фрезеруються.</p>
+              <button type="button" id="chair-sketch">Застосувати ескіз 700 × 1000 мм</button
+              ><label for="chair-seatHeight">Висота сидіння від низу, мм</label
+              ><input id="chair-seatHeight" name="seatHeight" type="number" min="0" step="1" aria-describedby="chair-seatHeight-error" />
+              <p class="error" id="chair-seatHeight-error"></p>
+              <label for="chair-seatLength">Довжина горизонтальної ділянки, мм</label
+              ><input id="chair-seatLength" name="seatLength" type="number" min="0" step="1" aria-describedby="chair-seatLength-error" />
+              <p class="error" id="chair-seatLength-error"></p>
+              <label for="chair-jointRight">Відступ справа біля сидіння, мм</label
+              ><input id="chair-jointRight" name="jointRight" type="number" min="0" step="1" aria-describedby="chair-jointRight-error" />
+              <p class="error" id="chair-jointRight-error"></p>
+              <label for="chair-topRight">Відступ справа зверху, мм</label
+              ><input id="chair-topRight" name="topRight" type="number" min="0" step="1" aria-describedby="chair-topRight-error" />
+              <p class="error" id="chair-topRight-error"></p>
+              <p id="chair-message" role="status" aria-live="polite"></p>
+            </div>
+            <div id="template-fields" hidden>
+              <label for="smile-side">Сторона встановлення ручки</label
+              ><select id="smile-side">
+                <option value="top">Зверху</option>
+                <option value="left">Зліва</option>
+                <option value="right">Справа</option>
+                <option value="bottom">Знизу</option>
+              </select>
+              <p id="smile-position-note" class="muted"></p>
               <p class="muted">Виріз від обраного краю. Усі розміри — мм у площині XY.</p>
               <label for="smile-length">Довжина ручки</label
               ><input id="smile-length" name="length" type="number" min="0" step="1" value="200" aria-describedby="smile-length-error" />
@@ -168,7 +198,7 @@
         <div class="toolbar">
           <div><strong>Креслення деталі</strong><small>Вигляд зверху · XY</small></div>
           <div class="drawing-actions">
-            <button id="show-pass" type="button">Координати проходу</button><button id="fit" type="button">⤢ Вписати у вікно</button>
+            <button id="show-tcn" type="button" hidden>Експорт TCN · тест</button><button id="show-pass" type="button">Координати проходу</button><button id="fit" type="button">⤢ Вписати у вікно</button>
           </div>
         </div>
         <div id="viewport">
@@ -191,7 +221,7 @@
         <button id="close-pass" type="button" aria-label="Закрити вікно" autofocus>✕</button>
       </div>
       <p class="pass-note">Початок системи координат — нижній лівий кут. X → вправо, Y ↑ вгору. Усі значення в мм.</p>
-      <p id="pass-error" role="status"></p>
+      <p id="pass-copy-status" role="status" aria-live="polite" class="pass-copy-status"></p><p id="pass-error" role="status"></p>
       <div class="pass-table-wrap">
         <table id="pass-table">
           <thead>
@@ -215,6 +245,10 @@
         верстата. Значення округлено до 0,01 мм.
       </p>
     </dialog>
-    <script type="module" src="js/main.js?v=chair-14"></script>
+    <dialog id="tcn-dialog" aria-labelledby="tcn-title"><div class="pass-heading"><div><p class="eyebrow">ЕКСПЕРИМЕНТАЛЬНИЙ ПРОФІЛЬ TPA / EDICAD 02.00</p><h2 id="tcn-title">Експорт ручки у TCN</h2></div><button id="close-tcn" type="button" aria-label="Закрити експорт">✕</button></div>
+<p class="pass-note">Профіль побудовано за вашими зразками. Перше випробування — відкриття та перегляд траєкторії без запуску обробки. Службові #201=1, #203=1, #8015=0 і лицева SIDE#1 відтворені зі зразка. Геометрія — контур, компенсацію виконує система верстата.</p>
+<form id="tcn-options" novalidate><label for="tcn-tool-preset">Відомий інструмент</label><select id="tcn-tool-preset"><option value="1011">1011 · Ø18,4 мм</option><option value="1012">1012 · Ø6 мм</option></select><div class="tcn-fields"><div><label for="tcn-tool">Код фрези (#205)</label><input id="tcn-tool" name="tool" type="number" step="1" min="0" value="1011" required></div><div><label for="tcn-diameter">Діаметр фрези, мм</label><input id="tcn-diameter" name="diameter" type="number" step="0.1" min="0" value="18.4" required></div><div><label for="tcn-depth">Глибина Z, мм (додатна)</label><input id="tcn-depth" name="depth" type="number" step="0.1" min="0" value="18.5" required></div><div><label for="tcn-leadIn">Захід за край, мм</label><input id="tcn-leadIn" name="leadIn" type="number" step="0.1" min="0" value="9" required></div><div><label for="tcn-leadOut">Вихід за край, мм</label><input id="tcn-leadOut" name="leadOut" type="number" step="0.1" min="0" value="9" required></div></div><label for="tcn-compensation">Компенсація відносно поточного проходу</label><select id="tcn-compensation" name="compensation"><option value="left">Зліва · з боку відходу для нашої ручки (#40=1)</option><option value="center">По центру (#40=0)</option><option value="right">Справа · зворотний прохід (#40=1)</option></select></form>
+<p class="pass-note">Значення 9 мм для заходу/виходу взято зі зразка: воно не обчислюється автоматично з діаметра. Діаметр не записується окремим полем TCN — інструмент визначається кодом #205. Подачу, оберти та безпечний Z цей профіль не задає.</p>
+<p id="tcn-message" role="status" aria-live="polite"></p><label for="tcn-preview">Вміст файлу для перевірки</label><textarea id="tcn-preview" readonly spellcheck="false"></textarea><button id="tcn-download" type="button" disabled>Завантажити тестовий .TCN</button></dialog><script type="module" src="js/main.js?v=tcn-test-16"></script>
   </body>
 </html>

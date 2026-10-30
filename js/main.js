@@ -1,3 +1,4 @@
+import {bindTcnExport} from './ui/tcnExport.js';
 import {bindCutout,refreshCutout} from './ui/cutout.js';
 import {bindPassDialog} from './ui/passDialog.js';
 import {bindTemplates,refreshTemplates} from './ui/templates.js';
@@ -26,6 +27,7 @@ bindParameters(document.querySelector('#parameters'));
 bindMilling();
 bindTemplates();
 bindPassDialog();
+bindTcnExport();
 bindCutout(svg,()=>view);
 subscribe(redraw);
 bindEvents(svg,()=>view,redraw);
